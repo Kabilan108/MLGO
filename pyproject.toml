@@ -1,0 +1,41 @@
+[tool.poetry]
+name = "MLGO"
+version = "0.1.0"
+description = ""
+authors = ["Tony Kabilan Okeke"]
+
+[tool.poetry.dependencies]
+python = ">=3.8,<3.12"
+pdoc3 = "^0.10.0"
+notebook = "^6.4.10"
+scikit-learn = "^1.2.0"
+pandas = "^1.5.2"
+interrogate = "^1.5.0"
+joblib = "^1.2.0"
+scipy = "1.10"
+prefect-jupyter = "^0.2.0"
+
+[tool.poetry.group.dev.dependencies]
+black = "^22.12.0"
+pytest = "^7.2.1"
+pre-commit = "^3.0.2"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.black]
+line-length = 79
+include = '\.pyi?$'
+exclude = '''
+/(
+	\.git
+| \.hg
+| \.mypy_cache
+| \.tox
+| \.venv
+| _build
+| buck-out
+| build   
+)/ 
+'''
