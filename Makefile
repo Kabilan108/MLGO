@@ -33,30 +33,19 @@ docs_save:
 
 
 # Data processing
-data/processed/xl.pkl: data/raw src/process.py
+data/processed/xy.pkl: data/raw src/process.py
 	@echo "Processing data..."
 	python src/process.py
 
-models/svc.pkl: data/processed/xl.pkl src/train_model.py
+models/svc.pkl: data/processed/xy.pkl src/train_model.py
 	@echo "Training model..."
 	python src/train_model.py
 
-pipeline: data/processed/xl.pkl models/svc.pkl
+notebooks/results.ipynb: models/svc.pkl src/run_notebook.py
+	@echo "Running notebook..."
+	python src/run_notebook.py
 
-
-# data/processed/xy.pkl: data/raw src/process.py
-# 	@echo "Processing data..."
-# 	python src/process.py
-#
-# models/svc.pkl: data/processed/xy.pkl src/train_model.py
-# 	@echo "Training model..."
-# 	python src/train_model.py
-#
-# notebooks/results.ipynb: models/svc.pkl src/run_notebook.py
-# 	@echo "Running notebook..."
-# 	python src/run_notebook.py
-
-# pipeline: data/processed/xy.pkl models/svc.pkl notebooks/results.ipynb
+pipeline: data/processed/xy.pkl models/svc.pkl notebooks/results.ipynb
 
 
 # Delete all compiled Python files
