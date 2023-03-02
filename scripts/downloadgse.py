@@ -28,24 +28,45 @@ def main():
 
     # Download the data
     cumida = CuMiDa(CONFIG.tempdir())
-    selected = cumida.index.query(conf["query"]).index.tolist()
+    selected = cumida.index.query(conf["query"]).index.tolist()[:4]
     cumida.download(selected)
 
     # Prepare data for DGE analysis
     with tqdm(total=len(selected), desc="Preparing data") as pbar:
+        datasets = []
         for dataset in selected:
-            fpath = CONFIG.datadir() / ("_".join(dataset) + ".tsv")
+            epath = CONFIG.datadir() / ("_".join(dataset) + "_exprs.tsv")
+            dpath = CONFIG.datadir() / ("_".join(dataset) + "_data.tsv")
 
-            gse = cumida.load(dataset).reset_index().drop(columns=["samples"])
+            gse = (
+                cumida.load(dataset, probe_ids=True)
+                .reset_index()
+                .drop(columns=["samples"])
+                .reset_index(names=["sample"])
+            )
+            gse["sample"] = "S" + (gse["sample"] + 1).astype(str)
             gse["type"] = gse["type"].apply(
                 lambda x: "normal" if "normal" in x else "tumor"
             )
-            gse = gse.set_index("type").T.reset_index(names=["Gene"])
-            gse["Gene"] = gse["Gene"].str.split(".").str[0]
 
-            gse.to_csv(fpath, sep="\t", index=False)
+            exprs = (
+                gse.drop(columns=["type"])
+                .set_index("sample")
+                .rename_axis("")
+                .T
+            )
+            exprs.to_csv(epath, sep="\t", index=True)
+
+            data = gse[["sample", "type"]].set_index("sample").rename_axis("")
+            data.to_csv(dpath, sep="\t", index=True)
+
+            datasets.append("_".join(dataset))
 
             pbar.update(1)
+
+    # Write list of datasets
+    with open(CONFIG.datadir() / "datasets.txt", "w") as f:
+        f.writelines(datasets)
 
     # Remove temporary directory
     shutil.rmtree(CONFIG.tempdir())
