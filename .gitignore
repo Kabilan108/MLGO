@@ -9,6 +9,9 @@ __pycache__/
 *.so
 *.o
 
+# Download artifacts
+*:Zone.Identifier
+
 # Distribution / packaging
 .Python
 env/
