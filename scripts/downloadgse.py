@@ -60,7 +60,7 @@ def main():
             data = gse[["sample", "type"]].set_index("sample").rename_axis("")
             data.to_csv(dpath, sep="\t", index=True)
 
-            datasets.append("_".join(dataset))
+            datasets.append("_".join(dataset) + "\n")
 
             pbar.update(1)
 
