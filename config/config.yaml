@@ -1,3 +1,7 @@
 scripts:
   downloadgse.py:
     query: "Classes == 2 & Platform == 'GPL570'"
+  enrichment.R:
+    datasets: "data/raw/datasets.txt"
+    datadir: "data/raw"
+    include_genes: "data/raw/landmark.txt"
