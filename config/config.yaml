@@ -1,0 +1,3 @@
+scripts:
+  downloadgse:
+    query: "Classes == 2 & Platform == 'GPL570'"
