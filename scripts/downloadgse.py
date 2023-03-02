@@ -28,7 +28,7 @@ def main():
 
     # Download the data
     cumida = CuMiDa(CONFIG.tempdir())
-    selected = cumida.index.query(conf["query"]).index.tolist()[:4]
+    selected = cumida.index.query(conf["query"]).index.tolist()
     cumida.download(selected)
 
     # Prepare data for DGE analysis
