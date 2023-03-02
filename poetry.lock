@@ -802,14 +802,14 @@ files = [
 
 [[package]]
 name = "infoml"
-version = "0.7.0"
+version = "0.8.0"
 description = "Python package for bioinformatics analysis and machine learning."
 category = "main"
 optional = false
 python-versions = ">=3.10,<4.0"
 files = [
-    {file = "infoml-0.7.0-py3-none-any.whl", hash = "sha256:ee0ab69bd39b44c97536ec58cc7489459300a9b5edcef1a3c9e38269c06d85a9"},
-    {file = "infoml-0.7.0.tar.gz", hash = "sha256:23647a652a0904e084db43fdee33380d80277c53134d2b19d1723bda129caa66"},
+    {file = "infoml-0.8.0-py3-none-any.whl", hash = "sha256:ecf1b22449b7dccc451162fd26756dac902859e734715ba5cc1ab093a9adff1f"},
+    {file = "infoml-0.8.0.tar.gz", hash = "sha256:dc7ff2f1b7f89fd27a34a085cb3c33958a3a4400eb1f8d87daa390eb28903b48"},
 ]
 
 [package.dependencies]
@@ -3155,4 +3155,4 @@ files = [
 [metadata]
 lock-version = "2.0"
 python-versions = ">=3.10,<3.12"
-content-hash = "1078f35ef987e7917ffc6f58458a4793704de746a76d8d154c7d93d481f2187e"
+content-hash = "91a015c5abc5fc37482bb11c629704e323a7b93d59bfa4a94c38515e26e2dae2"
