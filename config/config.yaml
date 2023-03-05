@@ -1,3 +1,4 @@
+datadir: "/mnt/e/mlgo-data"
 scripts:
   downloadgse.py:
     query: "Classes == 2 & Platform == 'GPL570'"
