@@ -1,5 +1,10 @@
-datadir: "/mnt/e/mlgo-data"
-scripts:
+paths:
+  #data: "/mnt/e/mlgo-data"
+    #temp: "/mnt/e/mlgo-data/.temp"
+  data: "data/raw"
+  temp: "data/.temp"
+dataprep:
+  species: "mmusculus"
   downloadgse.py:
     query: "Classes == 2 & Platform == 'GPL570'"
   enrichment.R:
