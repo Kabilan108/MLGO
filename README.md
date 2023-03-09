@@ -44,3 +44,28 @@ most responsible for the functional properties of a given gene product.
 - In order to perform the analysis and generate results, please run the
   `project.ipynb` notebook. Note that running the notebook will likely take
   several hours depending on your system specs.
+
+
+# Datasets
+- CuMiDa
+  - citation
+  - 21 datasets on GPL570
+    - other platforms?
+- CuRiDa? - more training data
+
+# DGE
+- R
+  - limma - linear models
+  - Emprical bayes moderation
+  - GO enrichment
+    - FDR = 0.05
+# Landmark genes
+
+- based on D-GEX paper (from their repo)
+  - need the citation from the list
+
+
+# Packages
+- limma
+- Go.db
+- hgu133plus2.db
