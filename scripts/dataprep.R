@@ -44,7 +44,7 @@ ensembl <- biomaRt::useMart("ensembl", dataset = "mmusculus_gene_ensembl")
 
 
 # Process the datasets
-x <- pbapply::pblapply(GEO_series, function(GSE) {
+out <- pbapply::pblapply(GEO_series, function(GSE) {
 	print(paste("Processing ", GSE, " (", which(GEO_series == GSE), "/", N, ")"))
 
     # Download the GSE metadata
@@ -158,3 +158,6 @@ x <- pbapply::pblapply(GEO_series, function(GSE) {
         names = deg$symbol
     )
 })
+
+# Save the results
+saveRDS(out, "./data/DEG_results.rds")
