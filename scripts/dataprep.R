@@ -36,7 +36,7 @@ metadata <- metadata %>%
     ungroup()
 
 # Get unique GEO series
-GEO_series <- unique(metadata$GEO_series)[1:1000]
+GEO_series <- unique(metadata$GEO_series)[1:100]
 N <- length(GEO_series)
 
 # Get the biomaRt
@@ -44,7 +44,7 @@ ensembl <- biomaRt::useMart("ensembl", dataset = "mmusculus_gene_ensembl")
 
 
 # Process the datasets
-out <- parallel::mclapply(GEO_series, function(GSE) {
+out <- pbapply::pblapply(GEO_series, function(GSE) {
     print(paste("Processing ", GSE, " (", which(GEO_series == GSE), "/", N, ")"))
 
     tryCatch({
@@ -153,6 +153,9 @@ out <- parallel::mclapply(GEO_series, function(GSE) {
                 n_randsets = 100, silent = TRUE
             ) ) )$results %>%
                 filter(FWER_underrep < 0.05 | FWER_overrep < 0.05)
+
+            # Delete downloaded files
+            unlink('/data/.temp/*')
 
             # Return the results
             out <- list(
