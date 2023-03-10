@@ -43,7 +43,7 @@ N <- length(GEO_series)
 ensembl <- biomaRt::useMart("ensembl", dataset = "mmusculus_gene_ensembl")
 
 
-# Process the datasets        
+# Process the datasets
 out <- parallel::mclapply(GEO_series, function(GSE) {
     print(paste("Processing ", GSE, " (", which(GEO_series == GSE), "/", N, ")"))
 
