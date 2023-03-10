@@ -25,7 +25,7 @@ assays <- SummarizedExperiment::assays
 species <- "mmusculus"
 species_short <- "mm"
 temp <- "./data/.temp"
-# config <- yaml::read_yaml("config/config.yaml")$scripts$dataprep.R
+# config <- yaml::read_yaml("config/config.yaml")$scripts$loaddatasets
 
 
 # ----------------------------------- DATA ---------------------------------- #
