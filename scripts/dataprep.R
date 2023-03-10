@@ -44,7 +44,7 @@ ensembl <- biomaRt::useMart("ensembl", dataset = "mmusculus_gene_ensembl")
 
 
 # Process the datasets
-out <- pbapply::pblapply(GEO_series, function(GSE) {
+res <- pbapply::pblapply(GEO_series, function(GSE) {
     print(paste("Processing ", GSE, " (", which(GEO_series == GSE), "/", N, ")"))
 
     tryCatch({
@@ -94,7 +94,7 @@ out <- pbapply::pblapply(GEO_series, function(GSE) {
         }
 
         if (SKIP) {
-            out <- NA
+            NA
         } else {
             # Get SRR accessions
             SRRs <- metadata$SRR_accession[metadata$GEO_series == GSE]
@@ -158,19 +158,17 @@ out <- pbapply::pblapply(GEO_series, function(GSE) {
             unlink('/data/.temp/*')
 
             # Return the results
-            out <- list(
+            list(
                 x = deg$logFC,
                 y = res$node_id,
                 features = deg$symbol
             )
         }
     }, error = function(e) {
-        out <- NA
+        NA
     })
-
-    out
 })
-names(out) <- GEO_series
+names(res) <- GEO_series
 
 # Save the results
-saveRDS(out, "./data/processed/DEG_results.rds")
+saveRDS(res, "./data/processed/DEG_results.rds")
