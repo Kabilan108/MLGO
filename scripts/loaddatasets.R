@@ -17,6 +17,8 @@ if (length(bioc)) BiocManager::install(bioc)
 require(dplyr)
 require(stringr)
 require(doSNOW)
+require(parallel)
+require(progress)
 
 # Define aliases for functions
 assays <- SummarizedExperiment::assays
@@ -25,6 +27,8 @@ assays <- SummarizedExperiment::assays
 species <- "mmusculus"
 species_short <- "mm"
 temp <- "./data/.temp"
+data <- "./data"
+logs <- "./logs"
 # config <- yaml::read_yaml("config/config.yaml")$scripts$loaddatasets
 
 
@@ -39,7 +43,7 @@ metadata <- getDEE2::getDEE2Metadata(species) %>%
     group_by(GEO_series) %>%
     filter(n() > 1, n() <= 1000) %>%
     ungroup()
-GEO_series <- unique(metadata$GEO_series)[1:50]
+GEO_series <- unique(metadata$GEO_series)[1:5]
 
 # Retrieve a biomaRt
 ensembl <- biomaRt::useMart("ensembl", dataset = "mmusculus_gene_ensembl")
@@ -50,13 +54,30 @@ N <- length(GEO_series)
 
 # ------------------------------ PARALLELIZATION ---------------------------- #
 
-CL <- parallel::makeCluster( parallel::detectCores() )
-doParallel::registerDoParallel(CL)
+CL <- makeCluster(2, outfile = paste0(logs, "/loaddatasets.log")
+registerDoSNOW(CL)
+
+PB <- progress_bar$new(
+    format = "Processing :gse :current/:total [:bar] :percent eta: :eta",
+    total = N, 
+    clear = FALSE,
+    width = 60
+)
+progress <- function(i) {
+    PB$tick(tokens = list(current = i, total = N, gse = GEO_series[i]))
+}
+opts <- list(progress = progress)
 
 
 # ----------------------------------- MAIN ---------------------------------- #
-
-res <- lapply(seq_along(GEO_series), function(i) {
+start_time <- Sys.time()
+res <- foreach(
+    i = seq_along(GEO_series), 
+    .combine = rbind, 
+    .options.snow = opts,
+    .packages = c("dplyr", "stringr", "tibble", "getDEE2", "GEOquery", "limma",
+                 "GOfuncR", "biomaRt")
+) %dopar% {
 
     GSE <- GEO_series[i]
     message("Processing ", GSE, " (", i, "/", N, ")")
@@ -102,7 +123,7 @@ res <- lapply(seq_along(GEO_series), function(i) {
         }
 
         if (SKIP) {
-            NA
+            c(GSE, NA, NA)
         } else {
             # Get SRR accessions
             SRRs <- metadata$SRR_accession[metadata$GEO_series == GSE]
@@ -163,19 +184,23 @@ res <- lapply(seq_along(GEO_series), function(i) {
                 # Delete downloaded files
                 unlink(paste0(temp, "/*"))
 
-                # Return the results
-                list(
-                    x = deg$logFC,
-                    y = res$node_id,
-                    features = deg$symbol
-                )
+                # Store results in row vector
+                row <- c(GSE, deg$logFC, paste(res$node_id, collapse = ";"))
+                names(row) <- c("GSE", deg$symbol, "GO_terms")
+                row
             }
         }
     }, error = function(e) {
-        NA
+        c(GSE, rep(NA, length(deg$symbol)), NA)
     })
-})
-names(res) <- GEO_series
+}
+end_time <- Sys.time()
+message("\nElapsed time: ", end_time - start_time)
 
-# Save the results
-saveRDS(res, "./data/processed/DEG_results.rds")
+rownames(res) <- res$GSE
+res <- res[, -1]
+
+# --------------------------------- CLEAN UP -------------------------------- #
+
+stopCluster(CL)
+saveRDS(res, paste0(data, "processed/DEG_results.rds"))
