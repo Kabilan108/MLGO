@@ -138,7 +138,7 @@ x <- pbapply::pblapply(GEO_series, function(GSE) {
         dplyr::rename(gene_id = ensembl_gene_id, symbol = external_gene_name) %>%
         dplyr::filter(!is.na(symbol))
     deg <- left_join(deg, symbols, by = "gene_id") %>%
-        drop_na(symbol)
+        tidyr::drop_na(symbol)
 
     # Gene Ontology enrichment
     res <- suppressMessages( suppressWarnings( GOfuncR::go_enrich(
