@@ -49,7 +49,7 @@ x <- pbapply::pblapply(GEO_series, function(GSE) {
 
     # Download the GSE metadata
     gse_meta <- suppressMessages( GEOquery::getGEO(
-        GSE, destdir = config$paths$temp, GSEMatrix = FALSE, getGPL = FALSE
+        GSE, destdir = './data/.temp', GSEMatrix = FALSE, getGPL = FALSE
     ) )
 
     # Get the GSMs
