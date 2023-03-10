@@ -69,7 +69,7 @@ out <- parallel::mclapply(GEO_series, function(GSE) {
         characs <- characs[I & J, ]
 
         if (nrow(characs) == 0) {
-            # If there are no unique characteristics, return NULL
+            # If there are no unique characteristics, skip this dataset
             SKIP <- TRUE
         } else if (nrow(characs) == 1) {
             # If there is only one unique characteristic, use it as the grouping variable
@@ -111,7 +111,8 @@ out <- parallel::mclapply(GEO_series, function(GSE) {
             # Download the STAR gene counts
             counts <- lapply(SRR_list, function(SRR) {
                 SE <- suppressMessages( suppressWarnings( getDEE2::getDEE2(
-                    species, SRR, metadata = metadata, counts = "GeneCounts"
+                    species, SRR, metadata = metadata, counts = "GeneCounts",
+                    quiet = TRUE
                 ) ) )
                 assays(SE)$counts
             }) %>%
