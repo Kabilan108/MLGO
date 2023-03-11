@@ -2,6 +2,7 @@ paths:
   #data: "/mnt/e/mlgo-data"
     #temp: "/mnt/e/mlgo-data/.temp"
   data: "data/raw"
+  processed: "data/processed/clean-data.feather"
   temp: "data/.temp"
 dataprep:
   species: "mmusculus"

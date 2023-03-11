@@ -44,6 +44,6 @@ names(res) <- c("GSE", cols, "GO_terms")
 res[cols] <- lapply(res[cols], as.numeric)
 
 # Save to feather
-write_feather(res, paste0(data, "/processed/data-cleaned.feather"))
+write_feather(res, paste0(data, "/processed/clean-data.feather"))
 
 message("Data cleaned.")
