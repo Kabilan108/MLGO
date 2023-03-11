@@ -43,7 +43,7 @@ metadata <- getDEE2::getDEE2Metadata(species) %>%
     group_by(GEO_series) %>%
     filter(n() > 1, n() <= 1000) %>%
     ungroup()
-GEO_series <- unique(metadata$GEO_series)[1:5]
+GEO_series <- unique(metadata$GEO_series)[1:100]
 
 # Retrieve a biomaRt
 ensembl <- biomaRt::useMart("ensembl", dataset = "mmusculus_gene_ensembl")
@@ -54,7 +54,7 @@ N <- length(GEO_series)
 
 # ------------------------------ PARALLELIZATION ---------------------------- #
 
-CL <- makeCluster(2, outfile = paste0(logs, "/loaddatasets.log")
+CL <- makeCluster(2, outfile = paste0(logs, "/loaddatasets.log"))
 registerDoSNOW(CL)
 
 PB <- progress_bar$new(
@@ -197,10 +197,7 @@ res <- foreach(
 end_time <- Sys.time()
 message("\nElapsed time: ", end_time - start_time)
 
-rownames(res) <- res$GSE
-res <- res[, -1]
-
 # --------------------------------- CLEAN UP -------------------------------- #
 
 stopCluster(CL)
-saveRDS(res, paste0(data, "processed/DEG_results.rds"))
+saveRDS(res, paste0(data, "/processed/DEG_results.rds"))
