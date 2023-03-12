@@ -45,7 +45,7 @@ metadata <- getDEE2::getDEE2Metadata(species) %>%
     group_by(GEO_series) %>%
     filter(n() > 1, n() <= 1000) %>%
     ungroup()
-GEO_series <- unique(metadata$GEO_series)[1:5]
+GEO_series <- unique(metadata$GEO_series)[1:1000]
 
 # Count completed datasets
 N <- length(GEO_series)
@@ -63,7 +63,6 @@ symbols <- biomaRt::getBM(
 
 
 # ------------------------------ PARALLELIZATION ---------------------------- #
-GEO_series <- sample(unique(metadata$GEO_series), 5)
 CL <- makeCluster(2, outfile = paste0(logs, "/loaddatasets.log"))
 registerDoSNOW(CL)
 
@@ -133,6 +132,7 @@ res <- foreach(
         }
 
         if (SKIP) {
+	    print('I AM SKIPPING THIS DATASET')
             c(GSE, NA, NA)
         } else {
             # Get SRR accessions
@@ -171,6 +171,7 @@ res <- foreach(
                 mutate(is_candidate = as.numeric(adj.P.Val < 0.05))
 
             if ( !any(deg$is_candidate == 1) ) {
+		print("NO CANDIDATES")
                 c(GSE, NA, NA)
             } else {
                 # Update gene symbols
@@ -194,11 +195,12 @@ res <- foreach(
             }
         }
     }, error = function(e) {
+	print("SOME OTHER ERROR")
         c(GSE, NA, NA)
     })
 }
 end_time <- Sys.time()
-message("\nElapsed time: ", end_time - start_time)
+message("\nElapsed time: ", difftime(end_time, start_time, units="auto"))
 
 # --------------------------------- CLEAN UP -------------------------------- #
 
