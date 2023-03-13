@@ -8,6 +8,7 @@
 # the feature matrix and target vector for the machine learning models.
 
 Rscript scripts/loadmetadata.R
+echo -e "\n\n"
 
 for file in data/raw/batch-*-GSE.txt; do
     batch=${file#data/raw/batch-}
@@ -24,5 +25,5 @@ for file in data/raw/batch-*-GSE.txt; do
         echo "data/processed/batch-${batch}-DEG.rds not found for batch $batch"
     fi
 
-    echo "\n\n"
+    echo -e "\n\n"
 done
