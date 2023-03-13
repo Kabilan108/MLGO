@@ -29,11 +29,6 @@ assays <- SummarizedExperiment::assays
 config <- yaml::read_yaml("config/config.yaml")
 x <- lapply(config$path, dir.create, recursive = TRUE, showWarnings = FALSE)
 
-
-# ----------------------------------- DATA ---------------------------------- #
-
-message("Downloading metadata and annotations...")
-
 # Get list of GSEs to download
 args <- commandArgs(trailingOnly = TRUE)
 if (length(args) == 0) {
@@ -44,25 +39,12 @@ if (length(args) == 0) {
     N <- length(GEO_series)
 }
 
-# Download and filter the metadata
-# -- For now, only use datasets with 1000 or fewer samples
-metadata <- getDEE2::getDEE2Metadata(config$species$name) %>%
-    filter(GEO_series != "", str_detect(Experiment_title, "^GSM")) %>%
-    mutate(GSM_accession = str_extract(Experiment_title, "GSM[0-9]+")) %>%
-    arrange(GEO_series) %>%
-    group_by(GEO_series) %>%
-    filter(n() > 1, n() <= 1000) %>%
-    ungroup()
-
-# Retrieve a biomaRt
-ensembl <- biomaRt::useMart(
-    "ensembl", dataset = config$species$ensembl, host = "useast.ensembl.org"
-)
-symbols <- biomaRt::getBM(
-    attributes = c("ensembl_gene_id", "external_gene_name"), mart = ensembl
-) %>%
-    rename(gene_id = ensembl_gene_id, symbol = external_gene_name) %>%
-    filter(!is.na(symbol))
+# Load metadata
+if ( file.exists(paste0(config$path$raw, "/metadata.RData")) ) {
+    load( paste0(config$path$raw, "/metadata.RData") )
+} else {
+    stop("Could not find data/processed/metadata.RData. Please run loadmetadata.R first.")
+}
 
 
 # ------------------------------ PARALLELIZATION ---------------------------- #
