@@ -15,10 +15,10 @@ for file in data/raw/batch-*-GSE.txt; do
 
     Rscript loaddatasets.R "$file"
 
-    if [[ -e data/processed/DEG_B${batch}.rds ]]; then
-        Rscript cleandata.R "data/processed/DEG_B${batch}.rds"
+    if [[ -e "data/processed/batch-${batch}-DEG.rds" ]]; then
+        Rscript cleandata.R "data/processed/batch-${batch}-DEG.rds"
     else
         echo "Error: Batch $batch failed"
-        echo "data/processed/DEG_B${batch}.rds not found for batch $batch"
+        echo "data/processed/batch-${batch}-DEG.rds not found for batch $batch"
     fi
 done
