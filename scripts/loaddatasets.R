@@ -45,7 +45,7 @@ metadata <- getDEE2::getDEE2Metadata(species) %>%
     group_by(GEO_series) %>%
     filter(n() > 1, n() <= 1000) %>%
     ungroup()
-GEO_series <- unique(metadata$GEO_series)[1:1000]
+GEO_series <- unique(metadata$GEO_series)
 
 # Count completed datasets
 N <- length(GEO_series)
