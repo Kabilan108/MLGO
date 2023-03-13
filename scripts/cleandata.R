@@ -52,7 +52,7 @@ res[cols] <- lapply(res[cols], as.numeric)
 
 # Save to feather
 write_feather(res, paste0(
-    config$path$processed, str_extract(degfile, "batch-\\d+"), "-clean-data.feather"
+    config$path$processed, "/", str_extract(degfile, "batch-\\d+"), "-clean-data.feather"
 ))
 
 message("Data cleaned.")

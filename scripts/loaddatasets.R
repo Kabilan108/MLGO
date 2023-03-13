@@ -210,5 +210,5 @@ message("\nElapsed time: ", difftime(end_time, start_time, units="auto"))
 
 stopCluster(CL)
 saveRDS(res, paste0(
-    config$path$processed, str_extract(GSE_file, 'batch-\\d'), "-DEG.rds"
+    config$path$processed, "/", str_extract(GSE_file, 'batch-\\d'), "-DEG.rds"
 ))
