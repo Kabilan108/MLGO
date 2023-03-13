@@ -1,14 +1,11 @@
-paths:
-  #data: "/mnt/e/mlgo-data"
-    #temp: "/mnt/e/mlgo-data/.temp"
-  data: "data/raw"
-  processed: "data/processed/clean-data.feather"
-  temp: "data/.temp"
-dataprep:
-  species: "mmusculus"
-  downloadgse.py:
-    query: "Classes == 2 & Platform == 'GPL570'"
-  enrichment.R:
-    datasets: "data/raw/datasets.txt"
-    datadir: "data/raw"
-    include_genes: "data/raw/landmark.txt"
+path:
+  raw:       "./data/raw"
+  processed: "./data/processed"
+  final:     "./data/final"
+  temp:      "./data/.temp"
+  logs:      "./logs"
+
+species:
+  name:    "mmusculus"
+  short:   "mm"
+  ensembl: "mmusculus_gene_ensembl"
