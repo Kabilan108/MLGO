@@ -50,7 +50,7 @@ if ( file.exists(paste0(config$path$raw, "/metadata.RData")) ) {
 # ------------------------------ PARALLELIZATION ---------------------------- #
 
 CL <- makeCluster(
-    detectCores()-1, outfile = paste0(config$path$logs, "/loaddatasets.log")
+    detectCores()/2, outfile = paste0(config$path$logs, "/loaddatasets.log")
 )
 registerDoSNOW(CL)
 
