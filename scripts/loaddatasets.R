@@ -6,7 +6,7 @@ options(repos = c(CRAN = "http://lib.stat.cmu.edu/R/CRAN/"))
 
 # Install packages
 cran <- c("dplyr", "stringr", "tibble", "yaml", "doSNOW", "BiocManager")
-bioc <- c("limma", "getDEE2", "GEOquery", "AnnotationDbi", "GOfuncR", 
+bioc <- c("limma", "getDEE2", "GEOquery", "AnnotationDbi", "GOfuncR",
          "org.Mm.eg.db", "biomaRt")
 cran <- cran[!(cran %in% installed.packages()[, "Package"])]
 bioc <- bioc[!(bioc %in% installed.packages()[, "Package"])]
@@ -23,37 +23,38 @@ require(progress)
 # Define aliases for functions
 assays <- SummarizedExperiment::assays
 
-# Configuration
-species <- "mmusculus"
-species_short <- "mm"
-temp <- "./data/.temp"
-data <- "./data"
-logs <- "./logs"
-# config <- yaml::read_yaml("config/config.yaml")$scripts$loaddatasets
+# Load configuration
+config <- yaml::read_yaml("config/config.yaml")
+x <- lapply(config$path, dir.create, recursive = TRUE, showWarnings = FALSE)
 
 
 # ----------------------------------- DATA ---------------------------------- #
 
 message("Downloading metadata and annotations...")
 
-# Download and filter the metadata 
+# Get list of GSEs to download
+args <- commandArgs(trailingOnly = TRUE)
+if (length(args) == 0) {
+    stop("No GSEs provided")
+} else {
+    GSE_file <- args[1]
+    GEO_series <- read.table(GSE_file, header = FALSE, stringsAsFactors = FALSE)[,1]
+    N <- length(GEO_series)
+}
+
+# Download and filter the metadata
 # -- For now, only use datasets with 1000 or fewer samples
-metadata <- getDEE2::getDEE2Metadata(species) %>%
+metadata <- getDEE2::getDEE2Metadata(config$species$name) %>%
     filter(GEO_series != "", str_detect(Experiment_title, "^GSM")) %>%
     mutate(GSM_accession = str_extract(Experiment_title, "GSM[0-9]+")) %>%
     arrange(GEO_series) %>%
     group_by(GEO_series) %>%
     filter(n() > 1, n() <= 1000) %>%
     ungroup()
-GEO_series <- unique(metadata$GEO_series)
-
-# Count completed datasets
-N <- length(GEO_series)
 
 # Retrieve a biomaRt
 ensembl <- biomaRt::useMart(
-    "ensembl", dataset = "mmusculus_gene_ensembl", 
-    host = "useast.ensembl.org"
+    "ensembl", dataset = config$species$ensembl, host = "useast.ensembl.org"
 )
 symbols <- biomaRt::getBM(
     attributes = c("ensembl_gene_id", "external_gene_name"), mart = ensembl
@@ -63,12 +64,15 @@ symbols <- biomaRt::getBM(
 
 
 # ------------------------------ PARALLELIZATION ---------------------------- #
-CL <- makeCluster(detectCores(), outfile = paste0(logs, "/loaddatasets.log"))
+
+CL <- makeCluster(
+    detectCores()-1, outfile = paste0(config$path$logs, "/loaddatasets.log")
+)
 registerDoSNOW(CL)
 
 PB <- progress_bar$new(
     format = "Processing :gse :current/:total [:bar] :percent eta: :eta",
-    total = N, 
+    total = N,
     clear = FALSE,
     width = 60
 )
@@ -81,8 +85,8 @@ opts <- list(progress = progress)
 # ----------------------------------- MAIN ---------------------------------- #
 start_time <- Sys.time()
 res <- foreach(
-    i = seq_along(GEO_series), 
-    .combine = rbind, 
+    i = seq_along(GEO_series),
+    .combine = rbind,
     .options.snow = opts,
     .packages = c("dplyr", "stringr", "tibble", "getDEE2", "GEOquery", "limma",
                  "GOfuncR")
@@ -94,7 +98,7 @@ res <- foreach(
     tryCatch({
         # Download the GSE metadata
         gse_meta <- suppressMessages( GEOquery::getGEO(
-            GSE, destdir = temp, GSEMatrix = FALSE, getGPL = FALSE
+            GSE, destdir = config$path$temp, GSEMatrix = FALSE, getGPL = FALSE
         ) )
         gsms <- GEOquery::GSMList(gse_meta)
 
@@ -104,11 +108,11 @@ res <- foreach(
             sapply(gsms, function(x) x@header$characteristics_ch1)
         ) )
         characs <- characs[
-            !grepl("librar[^:]*:", characs[,1]) & 
+            !grepl("librar[^:]*:", characs[,1]) &
             !grepl("read[^:]*:", characs[,1]),
         ]
         characs <- characs[
-            apply(characs, 1, function(x) length(unique(x)) > 1), 
+            apply(characs, 1, function(x) length(unique(x)) > 1),
         ]
 
         if (nrow(characs) == 0) {  # No characteristics
@@ -122,7 +126,7 @@ res <- foreach(
             SKIP <- FALSE
         } else {  # Multiple characteristics
             characs <- unlist( characs[
-                which.min( apply(characs, 1, function(x) length(unique(x))) ), 
+                which.min( apply(characs, 1, function(x) length(unique(x))) ),
             ] )
             unique_characs <- unique(characs)
             groups <- sapply(characs, function(x) which(unique_characs == x))
@@ -151,8 +155,8 @@ res <- foreach(
             # Download counts
             counts <- lapply(SRR_list, function(SRR) {
                 SE <- suppressMessages( suppressWarnings( getDEE2::getDEE2(
-                    species, SRR, metadata = metadata, counts = "GeneCounts",
-                    quiet = TRUE
+                    config$species$name, SRR, metadata = metadata,
+                    counts = "GeneCounts", quiet = TRUE
                 ) ) )
                 assays(SE)$counts
             }) %>%
@@ -186,7 +190,7 @@ res <- foreach(
                     filter(FWER_underrep < 0.05 | FWER_overrep < 0.05)
 
                 # Delete downloaded files
-                unlink(paste0(temp, "/*"))
+                unlink(paste0(config$path$temp, "/", GSE, "/*"))
 
                 # Store results in row vector
                 row <- c(GSE, deg$logFC, paste(res$node_id, collapse = ";"))
@@ -205,4 +209,6 @@ message("\nElapsed time: ", difftime(end_time, start_time, units="auto"))
 # --------------------------------- CLEAN UP -------------------------------- #
 
 stopCluster(CL)
-saveRDS(res, paste0(data, "/processed/DEG_results.rds"))
+saveRDS(res, paste0(
+    config$path$processed, str_extract(GSE_file, 'batch-\\d'), "-DEG.rds"
+))
