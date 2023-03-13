@@ -49,8 +49,10 @@ if ( file.exists(paste0(config$path$raw, "/metadata.RData")) ) {
 
 # ------------------------------ PARALLELIZATION ---------------------------- #
 
+logfile <- paste0(config$path$processed, "/", str_extract(GSE_file, 'batch-\\d'), "loaddatasets.log")
+
 CL <- makeCluster(
-    detectCores()/2, outfile = paste0(config$path$logs, "/loaddatasets.log")
+    detectCores()/2, outfile = paste0(config$path$logs, logfile)
 )
 registerDoSNOW(CL)
 
@@ -146,6 +148,9 @@ res <- foreach(
             }) %>%
                 do.call(cbind, .)
 
+	    # Delete downloaded files
+            unlink(paste0(config$path$temp, "/", GSE, "/*"))
+
             # Perform DE analysis
             groups <- factor(groups)
             design <- model.matrix(~0 + groups)
@@ -172,9 +177,6 @@ res <- foreach(
                     n_randsets = 100, silent = TRUE
                 ) ) )$results %>%
                     filter(FWER_underrep < 0.05 | FWER_overrep < 0.05)
-
-                # Delete downloaded files
-                unlink(paste0(config$path$temp, "/", GSE, "/*"))
 
                 # Store results in row vector
                 row <- c(GSE, deg$logFC, paste(res$node_id, collapse = ";"))
