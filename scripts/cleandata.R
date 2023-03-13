@@ -17,15 +17,22 @@ require(tibble)
 require(feather)
 
 # Configuration
-temp <- "./data/.temp"
-data <- "./data"
-logs <- "./logs"
-# config <- yaml::read_yaml("config/config.yaml")$scripts$loaddatasets
+config <- yaml::read_yaml("config/config.yaml")
+x <- lapply(config$path, dir.create, recursive = TRUE, showWarnings = FALSE)
+
+# Read command line arguments
+args <- commandArgs(trailingOnly = TRUE)
+if (length(args) == 0) {
+    stop("No DEG results file (batch-*-DEG.rds) specified.")
+} else {
+    degfile <- args[1]
+}
+
 
 # ------------------------------ DATA CLEANING ------------------------------ #
 
 # Load results
-res <- readRDS(paste0(data, "/processed/DEG_results.rds"))
+res <- readRDS(degfile)
 
 # Clean up matrix
 rownames(res) <- NULL
@@ -44,6 +51,8 @@ names(res) <- c("GSE", cols, "GO_terms")
 res[cols] <- lapply(res[cols], as.numeric)
 
 # Save to feather
-write_feather(res, paste0(data, "/processed/clean-data.feather"))
+write_feather(res, paste0(
+    config$path$processed, str_extract(degfile, "batch-\\d+"), "-clean-data.feather"
+))
 
 message("Data cleaned.")
