@@ -14,11 +14,13 @@ if (length(cran)) install.packages(cran)
 if (length(bioc)) BiocManager::install(bioc)
 
 # Load packages
-require(dplyr)
-require(stringr)
-require(doSNOW)
-require(parallel)
-require(progress)
+suppressMessages( suppressWarnings({
+    require(dplyr)
+    require(stringr)
+    require(doSNOW)
+    require(parallel)
+    require(progress)
+}) )
 
 # Define aliases for functions
 assays <- SummarizedExperiment::assays

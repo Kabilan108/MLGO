@@ -10,11 +10,13 @@ cran <- cran[!(cran %in% installed.packages()[, "Package"])]
 if (length(cran)) install.packages(cran)
 
 # Load packages
-require(dplyr)
-require(stringr)
-require(tidyr)
-require(tibble)
-require(feather)
+suppressMessages( suppressWarnings({
+    require(dplyr)
+    require(stringr)
+    require(tidyr)
+    require(tibble)
+    require(feather)
+}) )
 
 # Configuration
 config <- yaml::read_yaml("config/config.yaml")
