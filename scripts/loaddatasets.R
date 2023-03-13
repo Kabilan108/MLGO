@@ -63,7 +63,7 @@ symbols <- biomaRt::getBM(
 
 
 # ------------------------------ PARALLELIZATION ---------------------------- #
-CL <- makeCluster(2, outfile = paste0(logs, "/loaddatasets.log"))
+CL <- makeCluster(detectCores(), outfile = paste0(logs, "/loaddatasets.log"))
 registerDoSNOW(CL)
 
 PB <- progress_bar$new(
