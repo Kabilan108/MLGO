@@ -49,11 +49,9 @@ if ( file.exists(paste0(config$path$raw, "/metadata.RData")) ) {
 
 # ------------------------------ PARALLELIZATION ---------------------------- #
 
-logfile <- paste0(config$path$processed, "/", str_extract(GSE_file, 'batch-\\d'), "loaddatasets.log")
+logfile <- paste0(config$path$logs, "/", str_extract(GSE_file, 'batch-\\d'), "loaddatasets.log")
 
-CL <- makeCluster(
-    detectCores()/2, outfile = paste0(config$path$logs, logfile)
-)
+CL <- makeCluster(2, outfile = logfile)
 registerDoSNOW(CL)
 
 PB <- progress_bar$new(
