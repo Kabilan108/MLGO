@@ -10,9 +10,9 @@
 Rscript scripts/loadmetadata.R
 echo -e "\n\n"
 
-for file in data/raw/batch-*-GSE.txt; do
+for file in data/raw/batch-*.txt; do
     batch=${file#data/raw/batch-}
-    batch=${batch%-GSE.txt}
+    batch=${batch%.txt}
 
     echo "Processing Batch $batch"
 
