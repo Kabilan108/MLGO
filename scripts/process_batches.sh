@@ -27,3 +27,5 @@ for file in data/raw/batch-*.txt; do
 
     echo -e "\n\n"
 done
+
+python scripts/prepdata.py
