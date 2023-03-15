@@ -35,7 +35,7 @@ metadata <- getDEE2::getDEE2Metadata(config$species$name) %>%
     mutate(GSM_accession = str_extract(Experiment_title, "GSM[0-9]+")) %>%
     arrange(GEO_series) %>%
     group_by(GEO_series) %>%
-    filter(n() > 1, n() <= 1000) %>%
+    filter(n() > 1) %>%
     ungroup()
 
 # Retrieve a biomaRt
