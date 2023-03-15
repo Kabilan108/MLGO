@@ -51,7 +51,7 @@ if ( file.exists(paste0(config$path$raw, "/metadata.RData")) ) {
 
 logfile <- paste0(config$path$logs, "/", str_extract(GSE_file, 'batch-\\d'), "loaddatasets.log")
 
-CL <- makeCluster(2, outfile = logfile)
+CL <- makeCluster(detectCores()/2, outfile = logfile)
 registerDoSNOW(CL)
 
 PB <- progress_bar$new(
@@ -119,6 +119,10 @@ res <- foreach(
             SKIP <- FALSE
         }
 
+
+        unlink(paste0(config$path$temp, "/", GSE, "/*"))
+
+
         if (SKIP) {
 	    print('I AM SKIPPING THIS DATASET')
             c(GSE, NA, NA)
@@ -147,7 +151,7 @@ res <- foreach(
                 do.call(cbind, .)
 
 	    # Delete downloaded files
-            unlink(paste0(config$path$temp, "/", GSE, "/*"))
+
 
             # Perform DE analysis
             groups <- factor(groups)
