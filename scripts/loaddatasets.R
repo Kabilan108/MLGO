@@ -49,7 +49,7 @@ if ( file.exists(paste0(config$path$raw, "/metadata.RData")) ) {
 
 # ------------------------------ PARALLELIZATION ---------------------------- #
 
-logfile <- paste0(config$path$logs, "/", str_extract(GSE_file, 'batch-\\d'), "loaddatasets.log")
+logfile <- paste0(config$path$logs, "/", str_extract(GSE_file, 'batch-\\d+'), "loaddatasets.log")
 
 CL <- makeCluster(detectCores()/2, outfile = logfile)
 registerDoSNOW(CL)
@@ -198,5 +198,5 @@ message("\nElapsed time: ", difftime(end_time, start_time, units="auto"))
 
 stopCluster(CL)
 saveRDS(res, paste0(
-    config$path$processed, "/", str_extract(GSE_file, 'batch-\\d'), "-DEG.rds"
+    config$path$processed, "/", str_extract(GSE_file, 'batch-\\d+'), "-DEG.rds"
 ))
