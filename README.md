@@ -69,3 +69,41 @@ most responsible for the functional properties of a given gene product.
 - limma
 - Go.db
 - hgu133plus2.db
+
+
+
+Datasets:
+- Load all DEE2 datasets that have corresponding GEO accessions
+- Filter datasets with only 1 sample out
+- Total of 11334, including over 300000 SRA runs
+
+Processing (loaddatasets)
+- 12 separate batches, each with ~945 datasets
+- Download dataset
+- Perform DGE analysis
+- Perform Gene Ontology Enrichment
+- Return matrix with log fold changes and GO terms
+
+Processing (cleandata)
+- Convert the downloaded data into a matrix that can be read by python
+
+Processing (prepdata)
+- Combine data from each batch into single dataframe
+- Select only genes that are common across all data sets (How many?)
+- One hot encode the GO terms (labels)
+- Select GO terms that are present in
+
+Samples: (7130,)
+Features: (48978,)
+X: (7130, 48978)
+Y: (7130,)
+
+Total GO terms: 11130
+Y: (7130, 11130)
+
+X_train: (4563, 48978)
+Y_train: (4563, 11130)
+X_val: (1141, 48978)
+Y_val: (1141, 11130)
+X_test: (1426, 48978)
+Y_test: (1426, 11130)
