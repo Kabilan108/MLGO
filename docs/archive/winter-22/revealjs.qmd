@@ -1,0 +1,155 @@
+---
+title: MLGO
+subtitle: |
+    Deep Learning model for Predicting Gene Ontology Enrichment of Gene
+    Expression Datasets
+author: Tony Kabilan Okeke
+format:
+    revealjs:
+        incremental: true
+        theme: dark
+        footer: BMES 547 Project
+        slide-number: c
+        show-slide-number: all
+        background-transition: fade
+---
+
+# In the morning
+
+## Getting up
+
+- Turn off alarm
+- Get out of bed
+
+## Some code
+
+```{python}
+#| code-line-numbers: "|6|9"
+#| echo: true
+#| output-location: column-fragment
+
+import numpy as np
+import matplotlib.pyplot as plt
+
+r = np.arange(0, 2, 0.01)
+theta = 2 * np.pi * r
+fig, ax = plt.subplots(subplot_kw={'projection': 'polar'})
+ax.plot(theta, r)
+ax.set_rticks([0.5, 1, 1.5, 2])
+ax.grid(True)
+plt.show()
+```
+
+## Breakfast {background-color="aquamarine"}
+
+- Eat eggs
+- Drink coffee
+
+# In the evening
+
+## Dinner
+
+::: {.nonincremental}
+- Eat spaghetti
+- Drink wine
+:::
+
+## Going to sleep
+
+- Get in bed
+- Count sheep
+
+---
+
+## In the night
+
+:::: {.columns}
+
+::: {.column width=60%}
+
+### Column 1
+
+- Item 1
+- Item 2
+
+:::
+
+::: {.column width=40%}
+
+### Column 2
+
+- Item 3
+- Item 4
+
+:::
+
+::::
+
+
+## Slide with speaker notes
+
+Slide content ^[A footnote]
+
+::: {.notes}
+Speaker notes go here.
+:::
+
+::: aside
+Some additional commentary of more peripheral interest.
+:::
+
+## {auto-animate=true}
+
+::: {style="margin-top: 100px;"}
+Animating content
+:::
+
+## {auto-animate=true}
+
+::: {style="margin-top: 200px; font-size: 3em; color: red;"}
+Animating content
+:::
+
+## {auto-animate="true"}
+
+```r
+# Fill in the spot we created for a plot
+output$phonePlot <- renderPlot({
+  # Render a barplot
+})
+```
+
+## {auto-animate=true}
+
+```r
+# Fill in the spot we created for a plot
+output$phonePlot <- renderPlot({
+  # Render a barplot
+  barplot(WorldPhones[,input$region]*1000,
+          main=input$region,
+          ylab="Number of Telephones",
+          xlab="Year")
+})
+```
+
+## Nested fragments
+
+::: {.fragment .fade-in}
+::: {.fragment .highlight-red}
+::: {.fragment .semi-fade-out}
+Fade in > Turn red > Semi fade out
+:::
+:::
+:::
+
+::: {.fragment fragment-index=3}
+Appears last
+:::
+
+::: {.fragment fragment-index=1}
+Appears first
+:::
+
+::: {.fragment fragment-index=2}
+Appears second
+:::

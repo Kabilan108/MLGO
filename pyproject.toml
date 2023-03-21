@@ -7,11 +7,15 @@ authors = ["Tony Kabilan Okeke"]
 [tool.poetry.dependencies]
 python = ">=3.10,<3.12"
 notebook = "^6.4.10"
-scikit-learn = "^1.2.0"
+scikit-learn = "^1.2.1"
 pandas = "^1.5.2"
 scipy = "1.10"
 hydra-core = "1.3"
-infoml = "^0.5.0"
+infoml = "^0.8.0"
+jupyter = "^1.0.0"
+tqdm = "^4.64.1"
+pyyaml = "^6.0"
+statsmodels = "^0.13.5"
 
 [tool.poetry.group.dev.dependencies]
 interrogate = "^1.5.0"

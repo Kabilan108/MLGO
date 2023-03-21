@@ -1,0 +1,132 @@
+---
+title: MLGO
+subtitle: |
+    Deep Learning model for Predicting Gene Ontology Enrichment of Gene
+    Expression Datasets
+author: Tony Kabilan Okeke
+format:
+    revealjs:
+        incremental: true
+        theme: dark
+        footer: BMES 547 Project
+        slide-number: c
+        show-slide-number: all
+        background-transition: fade
+---
+
+# Introduction
+
+## Problem Description {.smaller}
+
+- Extracting biologically significant information from genomic data is a
+  difficult task.
+- Microarrays
+  - Microarray technology can be used for a variety of purposes in research and
+    clinical studies, such as measuring gene expression and detecting specific
+    DNA sequences (e.g., single-nucleotide polymorphisms, or SNPs)
+- How can we highlight the genes that are contributing most to protein function
+  in disease such as cancer?
+- The large number of genes on microarrays unrelated to protein function makes
+  building accurate prediction models that are easy to interpret difficult.
+
+## Background {.smaller}
+
+:::: {.columns}
+
+::: {.column width=60%}
+
+- Cancer is characterized by an overt proliferation of cells
+- Different cancer types may attack the body via different mechanisms
+- Identifying these mechanisms may allow for novel cancer therapeutics
+
+:::
+
+::: {.column width=40%}
+
+![](images/cancer-metastasis.png)
+
+:::
+
+::::
+
+## Goals {.smaller}
+
+- Determine if it possible to predict Gene Ontology Terms (GO term) using
+  Logistic regression as our machine learning model and gene expression data
+  as our featureset.
+- Highlight which probset genes contribute to predicting the presences of a GO
+  term the most.
+
+
+# Datasets
+
+## CuMiDa {.smaller}
+
+- We leveraged the Curated Microarray Database (CuMiDa) which was created to
+  benchmark machine learning methods on gene expression data.
+- CuMiDa data sets have undergone background correction and normalization, and
+  low quality probes were excluded.
+
+![](images/cumida.png){fig-align="center"}
+
+## CuMiDa {.smaller}
+
+:::: {.columns}
+
+::: {.column width=60%}
+
+- We limited our analysis to datasets containing only cancer and normal
+  samples that were run on the GPL570 platform (Affymetrix Human Genome U133
+  Plus 2.0 Array).
+  - We included 20 datasets (across 10 cancer types) in our analysis.
+  - The GPL570 microarray contains 54,675 probes. Probes without corresponding
+    GO terms were excluded, leaving us with 34,524 probes.
+
+:::
+
+::: {.column width=40%}
+
+| ID  | Cancer Type       | Samples |
+| --- | ----------------- | ------- |
+| 1   | Breast Cancer     | 51      |
+| 2   | Breast Cancer     | 116     |
+| 3   | Breast Cancer     | 91      |
+| 4   | Prostate Cancer   | 40      |
+| 5   | Lung Cancer       | 46      |
+| 6   | Gastric Cancer    | 48      |
+| 7   | Colorectal Cancer | 17      |
+
+:::
+
+::::
+
+# Methods
+
+## Methods {.smaller}
+
+- We limited our analysis to datasets containing only cancer and normal samples
+  that were run on the GPL570 platform (Affymetrix Human Genome U133 Plus 2.0
+  Array).
+- We included 20 datasets (across 10 cancer types) in our analysis.
+- The GPL570 microarray contains 54,675 probes. Probes without corresponding
+  GO terms were excluded, leaving us with 34,524 probes.
+
+## Methods {.smaller}
+
+- Logistic regression
+  - Single Label Output Classification
+- Before running the machine learning model, our feature set was standardized
+  using SciKit Learn’s StandardScaler function. Which removes the mean and
+  scaling to unit variance.
+- Leave one out Cross Validation Score
+- Feature Selection
+  - The relative importance of each attribute was computed using an Extra Tree
+    classifier with the number of tree estimators set at 50.
+  - Forward Feature Selection
+
+# Thank You
+
+## References {.smaller}
+
+- [CuMiDa](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC3070005/)
+- [Gene Ontology](http://geneontology.org/)
