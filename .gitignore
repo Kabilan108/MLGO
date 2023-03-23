@@ -15,6 +15,10 @@ __pycache__/
 # Repos directories
 repos/
 
+# Quarto build files
+.quarto/
+rendered/
+
 # Distribution / packaging
 .Python
 env/
