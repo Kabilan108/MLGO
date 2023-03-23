@@ -1,0 +1,70 @@
+/*-- scss:defaults --*/
+
+// $body-bg: #b7b09c;
+// $body-color: #4e3629;
+// $link-color: #ffc72c;
+// $presentation-heading-color: #cc0000;
+// $code-color: #cc0000;
+// $code-block-bg: #ded9ca;
+// $code-block-border-color: #000000;
+
+/*-- scss:rules --*/
+
+// style for title slide
+.reveal .slides section:first-child {
+    background-color: $body-bg;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+
+    // title font size
+    h1 {
+        font-size: 1em;
+        font-family: $presentation-heading-font;
+        color: #ff9494;
+    }
+}
+
+.reveal .slide-number {
+    color: $link-color;
+    font-size: 0.4em !important;
+    bottom: 0;
+    left: 50%;
+}
+
+.reveal .footer {
+    font-size: 0.4em !important;
+    bottom: 0;
+    left: 30%;
+}
+
+.reveal .slides section .fragment.semi-fade-out {
+    opacity: 1;
+    visibility: inherit;
+
+    &.visible {
+        opacity: 0.25;
+        visibility: inherit;
+    }
+}
+
+.sectionhead {
+    font-size: 1em;
+    text-align: center;
+    color: $presentation-heading-color;
+    font-family: $presentation-heading-font;
+    background-color: $body-bg;
+    margin: 1px;
+    padding: 2px 2px 2px 2px;
+    width: 120px;
+    border-left: 10px solid;
+}
+
+.blackbox {
+    color: #000000;
+    background-color: transparent;
+    margin: 1px;
+    padding: 5px 2px 5px 2px;
+    height: 205px;
+    border: 2px solid;
+}

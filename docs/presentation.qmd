@@ -1,9 +1,9 @@
 ---
-title: MLGO
-subtitle: |
-    Deep Learning model for Predicting Gene Ontology Enrichment of Gene
-    Expression Datasets
+title: "Compression of Differential Expression Data with Deep Autoencoders"
+# subtitle: |
+date-format: "DD MMM, YYYY"
 ---
+
 
 # Introduction
 
@@ -11,6 +11,7 @@ subtitle: |
 
 - Extracting biologically significant information from genomic data is a
   difficult task.
+- Monke
 - Microarrays
   - Microarray technology can be used for a variety of purposes in research and
     clinical studies, such as measuring gene expression and detecting specific
