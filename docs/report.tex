@@ -1,0 +1,100 @@
+\documentclass[11pt]{article}
+
+\usepackage[letterpaper]{geometry}    % set page margins
+\usepackage{graphicx}                 % for including images
+\usepackage{fancyhdr}                 % customize headers and footers
+\usepackage{titlesec}                 % customize section headings
+\usepackage{multicol}                 % for multi-column layout
+\usepackage{hyperref}                 % for hyperlinks
+\usepackage{setspace}                 % for setting the line spacing in footnotes
+\usepackage[hang]{footmisc}           % for footnote customization
+\usepackage{balance}                  % for balancing columns
+\usepackage[numbers]{natbib}          % for bibliography
+\usepackage{caption}                  % for figure captions
+
+% Define page margins
+\geometry{
+    top=0.5in,
+    bottom=0.5in,
+    left=0.5in,
+    right=0.5in,
+    headheight=0pt,
+    includeheadfoot
+}
+
+% Define link colors
+\hypersetup{
+    colorlinks=true,
+    linkcolor=blue,
+    filecolor=magenta,
+    urlcolor=blue,
+    citecolor=blue
+}
+
+% Customize header and footer
+\pagestyle{fancy}
+\fancyhf{}                         % clear default header and footer
+\renewcommand{\headrulewidth}{0pt} % remove header rule
+\fancyfoot[R]{\thepage}            % page number centered in footer
+
+% Customize section headings
+\titleformat{\section}{\normalfont\large\bfseries}{\thesection}{1em}{}
+\titlespacing{\section}{0pt}{\parskip}{-\parskip}
+
+% Customize footnotes
+\renewcommand{\footnotelayout}{\raggedright\setstretch{1.25}\parindent 0em}
+\renewcommand{\footnoterule}{%
+    \kern -0.5ex
+    \hrule width \textwidth height 0.5pt
+    \kern 0.5ex
+}
+
+% Remove indentation from first paragraph in section
+\setlength{\parindent}{0pt}
+
+\begin{document}
+
+% ----------------------------------- Document Header ---------------------------------- %
+\begin{flushleft}
+    \hrulefill\\
+    {\large\textbf{Compression of Differential Expression Data with Deep Autoencoders}\footnote[1]{  Avoid using identical title to any other publication. Scholarly articles are supposed to be unique identifiers and you do not want your report to appear as a version of the original appear on search engines. If your project is based on a paper, use a title that reflects what you did.}}\\
+    Tony Kabilan Okeke\textsuperscript{1}\footnote[2]{There is a possibility that your project files are made available to future students and/or publicly. If you do not wish to have your full name to appear, please only provide your first name here. If your project files should not be made public, please contact the instructor.}\\
+    \textsuperscript{1}School of Biomedical Engineering, Drexel University, USA\\
+    \vspace{1em}
+    Course: BMES 547\\
+    Instructor: Ahmet Sacan\\
+    Date: 2023-03-23\\
+    Data: \href{https://dee2.io/}{Digital Expression Explorer 2} \\
+    \hrulefill
+\end{flushleft}
+
+% ------------------------------------ Document Body ----------------------------------- %
+
+\begin{multicols*}{2}
+    \raggedcolumns
+
+    \input{includes/abstract}
+    \vspace{1em}
+
+    \input{includes/introduction}
+    \vspace{1em}
+
+    \input{includes/dataset}
+    \vspace{1em}
+
+    \input{includes/methods}
+    \vspace{1em}
+
+    \input{includes/results}
+    \vspace{1em}
+
+    \input{includes/discussion}
+    \vspace{1em}
+
+    \bibliographystyle{ieeetr}
+    \bibliography{includes/references}
+
+    \balance
+\end{multicols*}
+
+\end{document}
