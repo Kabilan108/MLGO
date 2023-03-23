@@ -19,6 +19,21 @@ repos/
 .quarto/
 rendered/
 
+# LaTeX build files
+*.aux
+*.bbl
+*.blg
+*.dvi
+*.fdb_latexmk
+*.fls
+*.idx
+*.ilg
+*.ind
+*.lof
+*.lot
+*-blx.bib
+*.run.xml
+
 # Distribution / packaging
 .Python
 env/
