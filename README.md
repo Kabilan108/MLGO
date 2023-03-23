@@ -20,6 +20,30 @@ most responsible for the functional properties of a given gene product.
 
 ```
 .
+├── README.md                       [Rroject description and installation instructions]
+├── config                          [Configuration files]
+├── docs
+│   ├── _quarto.yml
+│   ├── images
+│   │   ├── cancer-metastasis.png
+│   │   └── cumida.png
+│   └── presentation.qmd
+├── index.yaml
+├── models
+├── notebooks
+│   ├── Model-Development.ipynb
+│   ├── figures
+│   └── preliminaryanalysis.ipynb
+└── scripts
+    ├── cleandata.R
+    ├── loaddatasets.R
+    ├── loadmetadata.R
+    ├── prepdata.py
+    └── process_batches.sh
+```
+
+```
+.
 ├── README.md           [Contains project description and installation instructions]
 ├── index.yaml          [Contains project details]
 ├── presentation.pdf   [Project presentation]
