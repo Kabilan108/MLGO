@@ -6,8 +6,7 @@ author: Tony Kabilan Okeke
 format:
     revealjs:
         incremental: true
-        theme: [night, custom.scss]
-        footer: BMES 547 Project
+        theme: [serif, custom.scss]
         slide-number: c
         show-slide-number: all
         background-transition: fade

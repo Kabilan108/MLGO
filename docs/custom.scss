@@ -17,11 +17,27 @@
     background-position: center;
     background-repeat: no-repeat;
 
-    // title font size
-    h1 {
+    h2 {
+        font-size: 1.2em;
+        font-family: $presentation-heading-font;
+        text-align: center;
+        margin-top: 20%;
+    }
+
+    h4 {
         font-size: 1em;
         font-family: $presentation-heading-font;
-        color: #ff9494;
+        text-align: center;
+        margin-top: 5%;
+        color: rgb(92, 92, 92);
+    }
+
+    h5 {
+        font-size: .8em;
+        font-family: $presentation-heading-font;
+        text-align: center;
+        margin-top: 5%;
+        color: rgb(121, 121, 121);
     }
 }
 
