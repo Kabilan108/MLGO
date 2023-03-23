@@ -43,17 +43,21 @@ most responsible for the functional properties of a given gene product.
   install dependencies, run `pip3 install -r requirements.txt`
 - To download the datasets, you can run `bash scripts/process_batches.sh`
   - This will download the datasets and perform the DGE analysis and GO
-    enrichment.
+    enrichment. It will then prepare the data for use in the deep learning
+    model.
   - Note that this will take a long time to run, and will require >20GB of
     storage space.
-  - Alternatively, you can download the data from my Dropbox, [here](https://www.dropbox.com/s/if2x86765uc5l1k/data.tar.gz\?dl\=1) or by using the command `wget "https://www.dropbox.com/s/if2x86765uc5l1k/data.tar.gz\?dl\=1" -O data.tar.gz`
-    - Once you've downloaded the datasets, you can extract them by running
-      `tar -xvf data.tar.gz -C PATH_TO_DATA_FOLDER`
-      - This will create a folder called data in the PATH_TO_DATA_FOLDER
-        directory.
-      - Update the paths in the [config.yaml](config/config.yaml) file to point
-        to the data folder.
+  - Alternatively, you can download the data from my Dropbox, [here](https://www.dropbox.com/s/if2x86765uc5l1k/data.tar.gz\?dl\=1) or by using the commands below.
+    - This will create a folder called data in the PATH_TO_DATA_FOLDER
+      directory.
+    - Update the paths in the [config.yaml](config/config.yaml) file to point
+      to the data folder.
 
+```bash
+# Download preprocessed data from Dropbox
+wget "https://www.dropbox.com/s/if2x86765uc5l1k/data.tar.gz\?dl\=1" -O data.tar.gz
+tar -xvf data.tar.gz -C PATH_TO_DATA_FOLDER
+```
 
 # Datasets
 - CuMiDa
