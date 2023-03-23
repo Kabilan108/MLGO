@@ -352,6 +352,3 @@ Cross Validation Loss: $0.9632$
 - [Gene Ontology](http://geneontology.org/)
 - [Digital Expression Explorer 2](https://dee2.io/index.html)
 - [Autoencoders](https://en.wikipedia.org/wiki/Autoencoder)
-
-
-Cross-Validation Loss: 0.9632
