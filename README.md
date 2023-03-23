@@ -21,8 +21,8 @@ most responsible for the functional properties of a given gene product.
 ```
 .
 ├── README.md           [Contains project description and installation instructions]
-├── index.yml           [Contains project details]
-├── presentation.pptx   [Project presentation]
+├── index.yaml          [Contains project details]
+├── presentation.pdf   [Project presentation]
 ├── report.docx         [Project report]
 ├── requirements.txt    [Contains list of project dependencies]
 ├── results             [Contains tables and figures generated]
@@ -41,9 +41,18 @@ most responsible for the functional properties of a given gene product.
 
 - All dependencies for this project are contained in `requirements.txt`. To
   install dependencies, run `pip3 install -r requirements.txt`
-- In order to perform the analysis and generate results, please run the
-  `project.ipynb` notebook. Note that running the notebook will likely take
-  several hours depending on your system specs.
+- To download the datasets, you can run `bash scripts/process_batches.sh`
+  - This will download the datasets and perform the DGE analysis and GO
+    enrichment.
+  - Note that this will take a long time to run, and will require >20GB of
+    storage space.
+  - Alternatively, you can download the data from my Dropbox, [here](https://www.dropbox.com/s/if2x86765uc5l1k/data.tar.gz\?dl\=1) or by using the command `wget "https://www.dropbox.com/s/if2x86765uc5l1k/data.tar.gz\?dl\=1" -O data.tar.gz`
+    - Once you've downloaded the datasets, you can extract them by running
+      `tar -xvf data.tar.gz -C PATH_TO_DATA_FOLDER`
+      - This will create a folder called data in the PATH_TO_DATA_FOLDER
+        directory.
+      - Update the paths in the [config.yaml](config/config.yaml) file to point
+        to the data folder.
 
 
 # Datasets
