@@ -50,3 +50,16 @@ symbols <- biomaRt::getBM(
 
 # Save metadata and biomaRt
 save(metadata, symbols, file = paste0(config$path$raw, "/metadata.RData"))
+
+# Split the GEO series into 12 batches
+GEO_series <- unique(metadata$GEO_series)
+batches <- split(GEO_series, cut(seq_along(GEO_series), 20, labels=FALSE))
+
+# Write the batches to files
+x <- lapply(seq_along(batches), function(i) write.table(
+    batches[[i]],
+    paste0(config$path$raw, "/batch-", i, ".txt"),
+    row.names = FALSE,
+    col.names = FALSE,
+    quote = FALSE
+))
