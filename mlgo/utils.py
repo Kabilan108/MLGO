@@ -140,3 +140,16 @@ def plotpca(Y: ndarray, V: ndarray, samples: ndarray = None) -> Tuple[Figure, Ax
     ax.axis("square")
 
     return fig, ax
+
+
+def format(ax):
+    """
+    Format Matplotlib Axes object.
+    """
+
+    ax.spines[["top", "right"]].set_visible(False)
+    ax.spines[["left", "bottom"]].set_linewidth(1.2)
+    ax.tick_params(axis="both", labelsize=12)
+    ax.minorticks_on()
+    ax.grid(which="minor", linestyle=":", linewidth="0.5", color="black", alpha=0.3)
+    ax.grid(which="major", linestyle="-", linewidth="0.5", color="black", alpha=0.5)
