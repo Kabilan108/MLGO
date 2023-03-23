@@ -36,11 +36,11 @@ most responsible for the functional properties of a given gene product.
 │   ├── project.ipynb               [Notebook used for analysis]
 │   └── preliminaryanalysis.ipynb   [Notebook used for preliminary analysis]
 └── scripts
-    ├── cleandata.R                [Prepares dataframes with GO terms and log fold changes]
-    ├── loaddatasets.R             [Downloads datasets and performs DGE analysis]
-    ├── loadmetadata.R             [Loads metadata for datasets]
-    ├── prepdata.py                [Prepares training, validation, and test data]
-    └── process_batches.sh         [Runs all scripts to download and process data]
+    ├── cleandata.R                 [Prepares dataframes with GO terms and log fold changes]
+    ├── loaddatasets.R              [Downloads datasets and performs DGE analysis]
+    ├── loadmetadata.R              [Loads metadata for datasets]
+    ├── prepdata.py                 [Prepares training, validation, and test data]
+    └── process_batches.sh          [Runs all scripts to download and process data]
 ```
 
 ### Installation & Use
