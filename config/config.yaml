@@ -1,8 +1,8 @@
 path:
-  raw:       "./data/raw"
-  processed: "./data/processed"
-  final:     "./data/final"
-  temp:      "./data/.temp"
+  raw:       "/mnt/e/mlgo-data/raw"
+  processed: "/mnt/e/mlgo-data/processed"
+  final:     "/mnt/e/mlgo-data/final"
+  temp:      "/mnt/e/mlgo-data/.temp"
   logs:      "./logs"
 
 split:
