@@ -1,0 +1,13 @@
+project:
+  output-dir: rendered
+
+author: Tony Kabilan Okeke
+
+format:
+    revealjs:
+        incremental: true
+        theme: dark
+        footer: BMES 547 Project
+        slide-number: c
+        show-slide-number: all
+        background-transition: fade
