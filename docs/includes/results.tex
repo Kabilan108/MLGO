@@ -25,10 +25,14 @@ the scatter plot of the first two principal components. The points are colored b
 the GO0005622 (the most common GO term) term is enriched or not. No clear separation
 between the two classes is observed.
 
+\vspace{0.2cm}
+
 We then visualized the data using t-distributed stochastic neighbor embedding (t-SNE).
 Figure \ref{fig:results}b shows the scatter plot of the first two t-SNE components. The
 points are colored by whether the GO0005622 term is enriched or not. Again, no clear
 separation between the two classes is observed.
+
+\vspace{0.2cm}
 
 Next, we needed to determine the optimal number of neurons and hidden layers for the
 autoencoder. To identify the optimal number of neurons, we trained the autoencoder with
@@ -38,6 +42,8 @@ using the loss on the validation set. We tested the following numbers of neurons
 training and validation sets for each number of neurons. The loss on the validation set
 decreased as the number of neurons increased, and plateaus at around 2000 neurons.
 
+\vspace{0.2cm}
+
 To identify the optimal number of hidden layers, we trained the autoencoder with varying
 numbers of hidden layers. The total number of neurons in the network was first fixed at
 2000 (the optimal number of neurons from the previous experiment), and subsequently at
@@ -46,6 +52,8 @@ of the previous layer. We tested the following numbers of hidden layers: 1, 2, 3
 7, 8, 9, and 10. Figure \ref{fig:results}d shows the loss on the training and validation
 sets for each number of hidden layers. The loss on the validation set increased as the
 number of hidden layers increased, with the lowest loss observed at 1 hidden layer.
+
+\vspace{0.2cm}
 
 Finally, we trained the autoencoder with the optimal number of neurons and hidden layers
 (2000 neurons in a single hidden layer) over 50 epochs. The performance of the final model
