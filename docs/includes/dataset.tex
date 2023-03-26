@@ -4,5 +4,21 @@
 
 \section{Dataset}
 
-Describe the experiment(s) that produced the datasets you are analyzing in your project.
-What are the experimental groups? How was the data collected?
+We used the \emph{Digital Expression Explorer 2} (DEE2) project as the primary source of
+RNA-seq data for our analysis. The DEE2 project is a curated repository of uniformly
+processed RNA-seq data collected from public repositories, including the Sequence
+Read Archive (SRA) hosted by the National Center for Biotechnology Information (NCBI)
+\cite{DEE2}.The raw fastq files are downloaded from the SRA, undergo quality control and
+alignment to the reference genome, and are quantified using the STAR and Kallisto tools.
+The feature count and metadata tables are available for download from the DEE2 website,
+and through the `getDEE2' R package. A metadata table which lists all curated datasets
+for each species is also available for download. DEE2 provides 532,711 processed RNA-seq
+runs (SRRs) from mouse experiments and 475,547 processed RNA-seq runs from human
+experiments, as well as other species \cite{DEE2}.
+
+For our analysis, we curated a subset of the mouse RNA-seq data, which consisted of
+11,130 unique datasets with over 350,000 individual runs. We obtained additional
+metadata for these datasets from the Gene Expression Omnibus (GEO) database. We
+filtered out datasets that had only one sample, or that did not have at least two
+distict conditions or labels. This resulted in a final collection of 7,130 datasets
+with gene counts for 48,978 genes.
