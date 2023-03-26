@@ -4,22 +4,33 @@
 
 \section{Introduction}
 
-Problem description, Motivation. Why are we studying this problem? What is the
-biomedical need? Public health stats, if available.\\
+Differential expression analysis (DEA) is a commonly used technique to identify genes that
+are differentially expressed between two or more biological conditions. Gene Ontology
+(GO) enrichment analysis, on the other hand, is used to interpret the biological
+functions and pathways associated with the differentially expressed genes. Both DEA and
+GO enrichment analysis is commonly used in the analysis of RNA-seq data. However, both
+can be affected by various sources of noise and bias, such as batch effects, sample
+heterogeneity, and gene annotation errors \cite{koch2018beginner}. Thus, it is crucial to
+develop robust and accurate methods to integrate DEA and GO enrichment analysis in a
+data-driven manner.
 
-Biology/Physiology:
-\begin{itemize}
-    \item Describe the underlying biology/physiology.
-    \item Find figures illustrating the system (remember to cite the sources).
-\end{itemize}
+To address this issue, we are developing a neural network model to predict the enriched
+GO terms from the log fold change (logFC) values computed by DEA. Neural networks are
+powerful machine learning models that can learn complex patterns and relationships from
+high-dimensional data. In this project, we aim to develop an autoencoder model that can
+learn a compressed latent representation of the logFC values. The autoencoder is composed
+of an encoder that maps the input logFC values to a lower-dimensional latent space and a
+decoder that reconstructs the input logFC values from the latent space. We hypothesize
+that the latent space of the autoencoder will capture the essential features and patterns
+of the logFC values. In our future work, we will use the latent space to predict the
+enriched GO terms from the logFC values.
 
-Goals:
-\begin{itemize}
-    \item What do you/authors hope to find/accomplish with this study?
-    \item If successful, how will your findings/result influ-ence our understanding or medical practice?
-\end{itemize}
-
-Related Work:
-\begin{itemize}
-    \item Provide a short survey of related work. Put this study in the context of others. Check out the papers cited by your project paper and the papers that cite your project paper to find out what else is being done in this area. Use a citation manager (e.g., Endnote) to automate creation of references, e.g., \cite{smith2010}.
-\end{itemize}
+There have been several previous studies that have used neural networks to predict
+gene expression or gene function from transcriptomic data. One such study is D-GEX,
+which proposed a deep neural network model to predict gene expression levels from a set
+of landmark genes \cite{D-GEX}. The D-GEX model was shown to accurately predict the
+expression levels of thousands of genes with lower error rates that the current standard
+(linear regression) \cite{D-GEX}. Our work differs from D-GEX in that we
+focus on the integration of DEA and GO enrichment analysis. Additionally, by first
+learning a latent representation of the DEA results, we will also be able to reduce
+noise and bias in the data, improving the accuracy of the downstream predictions.
