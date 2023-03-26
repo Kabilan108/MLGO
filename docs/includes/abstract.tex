@@ -4,6 +4,12 @@
 
 \section*{Abstract}
 
-A one-paragraph summary of the project. Introduce the problem. Describe your model
-and implementa-tion (mention the programming/modeling environ-ment you used).
-Summarize your results/findings.
+The paper presents a neural network model for predicting enriched Gene Ontology (GO)
+terms from RNA-Seq differential expression analysis (DEA) data. We trained an
+autoencoder model using log fold change (logFC) values from mouse RNA-Seq datasets
+curated from the Digital Expression Explorer 2 repository. We hypothesized that the
+autoencoder's latent space would capture the essential features and patterns of the
+logFC values to predict enriched GO terms. We normalized the feature matrix,
+removed low-variance genes, and compared their approach to previous studies. The results
+demonstrated that the autoencoder was able to reconstruct the log fold change values
+with a mean squared error of 0.92.
