@@ -4,7 +4,7 @@
 	"name": "Python 3",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/python:0-3.10",
-	
+
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	"features": {
 		"ghcr.io/devcontainers/features/python:1": {},
@@ -15,7 +15,7 @@
 	// "forwardPorts": [],
 
 	// Use 'postCreateCommand' to run commands after the container is created.
-	// "postCreateCommand": "pip3 install --user -r requirements.txt",
+	"postCreateCommand": "pip3 install --user -r requirements.txt && pre-commit install",
 
 	// Configure tool-specific properties.
 	"customizations": {
@@ -31,7 +31,8 @@
 				"formulahendry.code-runner",
 				"ms-python.vscode-pylance",
 				"WakaTime.vscode-wakatime",
-				"REditorSupport.r"
+				// "REditorSupport.r",
+				"ms-python.black-formatter"
 			]
 		}
 	}
