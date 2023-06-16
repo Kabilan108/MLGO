@@ -42,7 +42,7 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && pip --disable-pip-version-check --no-cache-dir install otter-grader \
     && pip --disable-pip-version-check --no-cache-dir install okpy \
     && pip --disable-pip-version-check --no-cache-dir install scikit-learn \
-    && pip --disable-pip-version-check --no-cache-dir install torch torchvision --index-url https://download.pytorch.org/whl/cu117
+    && pip --disable-pip-version-check --no-cache-dir install torch torchvision --index-url https://download.pytorch.org/whl/cu117 \
     && install2.r --error --skipinstalled --ncpus -1 \
         devtools \
         languageserver \
