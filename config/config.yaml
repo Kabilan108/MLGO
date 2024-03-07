@@ -1,9 +1,9 @@
 path:
-  raw:       "/mnt/e/mlgo-data/raw"
-  processed: "/mnt/e/mlgo-data/processed"
-  final:     "/mnt/e/mlgo-data/final"
-  temp:      "/mnt/e/mlgo-data/.temp"
-  logs:      "./logs"
+  raw:       "/home/ubuntu/mlgo-data/raw"
+  processed: "/home/ubuntu/mlgo-data/processed"
+  final:     "/home/ubuntu/mlgo-data/final"
+  temp:      "/home/ubuntu/mlgo-data/.temp"
+  logs:      "/home/ubuntu/mlgo-data/logs"
 
 split:
   val: 0.2
