@@ -14,19 +14,23 @@
 Rscript scripts/loadmetadata.R
 echo -e "\n\n"
 
-for file in data/raw/batch-*.txt; do
-    batch=${file#data/raw/batch-}
+RAW_PATH="/home/ubuntu/mlgo-data/raw"
+PROCESSED_PATH="/home/ubuntu/mlgo-data/processed"
+FINAL_PATH="/home/ubuntu/mlgo-data/final"
+
+for file in $RAW_PATH/batch-*.txt; do
+    batch=${file#$RAW_PATH/batch-}
     batch=${batch%.txt}
 
     echo "Processing Batch $batch"
 
     Rscript scripts/loaddatasets.R "$file"
 
-    if [[ -e "data/processed/batch-${batch}-DEG.rds" ]]; then
-        Rscript scripts/cleandata.R "data/processed/batch-${batch}-DEG.rds"
+    if [[ -e "$PROCESSED_PATH/batch-${batch}-DEG.rds" ]]; then
+        Rscript scripts/cleandata.R "$PROCESSED_PATH/batch-${batch}-DEG.rds"
     else
         echo "Error: Batch $batch failed"
-        echo "data/processed/batch-${batch}-DEG.rds not found for batch $batch"
+        echo "$PROCESSED_PATH/batch-${batch}-DEG.rds not found for batch $batch"
     fi
 
     echo -e "\n\n"
@@ -35,6 +39,6 @@ done
 python scripts/prepdata.py
 
 echo -e "\n\nZipping data files..."
-tar -czf data/final/data.tar.gz data/final/*.npz
+tar -czf $FINAL_PATH/data.tar.gz $FINAL_PATH/*.npz
 
 echo -e "\n\nDone!"
