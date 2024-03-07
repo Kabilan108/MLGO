@@ -40,7 +40,7 @@ metadata <- getDEE2::getDEE2Metadata(config$species$name) %>%
 
 # Retrieve a biomaRt
 ensembl <- biomaRt::useMart(
-    "ensembl", dataset = config$species$ensembl, host = "useast.ensembl.org"
+    "ensembl", dataset = config$species$ensembl, host = "jul2023.archive.ensembl.org"
 )
 symbols <- biomaRt::getBM(
     attributes = c("ensembl_gene_id", "external_gene_name"), mart = ensembl

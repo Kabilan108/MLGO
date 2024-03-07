@@ -7,12 +7,21 @@ sudo apt-get install -y \
     libssl-dev \
     libcurl4-openssl-dev \
     libxml2-dev \
-    libfontconfig1-dev
+    libfontconfig1-dev \
+    libharfbuzz-dev \
+    libfribidi-dev \
+    libfreetype6-dev \
+    libpng-dev \
+    libtiff5-dev \
+    libjpeg-dev
 
 # Install R and required packages
 sudo apt-get install -y r-base r-base-dev
-sudo R -e "install.packages(c('dplyr', 'stringr', 'tibble', 'yaml', 'doSNOW', 'feather', 'BiocManager'), repos='http://lib.stat.cmu.edu/R/CRAN/')"
+sudo R -e "install.packages(c('dplyr', 'stringr', 'tibble', 'yaml', 'doSNOW', 'feather', 'devtools', 'BiocManager'), repos='http://lib.stat.cmu.edu/R/CRAN/')"
 sudo R -e "BiocManager::install(c('limma', 'getDEE2', 'GEOquery', 'AnnotationDbi', 'GOfuncR', 'org.Mm.eg.db', 'biomaRt'))"
+
+# Fix biomaRt bug
+sudo R -e 'devtools::install_version("dbplyr", version = "2.3.4")'
 
 # Install Python and required packages
 sudo apt-get install -y python3 python3-pip python3-venv
