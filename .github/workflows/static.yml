@@ -16,7 +16,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: https://{{cookiecutter.docs_url}}/{{cookiecutter.directory_name}}
+      url: https://kabilan108.github.io/MLGO
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
