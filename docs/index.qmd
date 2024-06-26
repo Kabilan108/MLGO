@@ -192,13 +192,13 @@ autoencoder = Sequential([encoder, decoder])
 ### Optimization & Performance {.smaller}
 
 ::: {.columns}
-
 ::: {.column width=50%}
 ![](images/optimization-hidden-units.png){.fragment fig-align="center"}
 :::
 
 ::: {.column width=50%}
 ![](images/optimization-hidden-layers.png){.fragment fig-align="center"}
+:::
 :::
 
 ::: {.callout}
