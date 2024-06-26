@@ -1,6 +1,9 @@
 name: Deploy Quarto Docs to Pages
 
 on:
+  push:
+    tags:
+      - "docs-*"
   workflow_dispatch:
 
 permissions:
