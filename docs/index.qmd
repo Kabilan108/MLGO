@@ -1,0 +1,237 @@
+---
+title: "Compression of Differential Expression Data with Deep Autoencoders"
+subtitle: ""
+author: "Tony Kabilan Okeke"
+date: today
+date-format: long
+format:
+  html:
+    toc: true
+    html-math-method: katex
+    self-contained: true
+    code-tools: true
+    code-fold: true
+    grid:
+      margin-width: 350px
+execute:
+  warning: false
+reference-location: margin
+citation-location: margin
+bibliography: references.bib
+jupyter: python3
+---
+
+## Introduction
+
+### Problem Description {.smaller}
+
+Differential Expression Analysis is used to identify genes that have different levels of expression between more than two samples or conditions. Gene Ontology Enrichment analyzes functional annotations of differentially expressed genes. Extracting biologically significant information from genomic data is a difficult task due to the high dimensionality and complexity of genomic data, which makes it hard to build accurate and interpretable prediction models for protein function. The data used in these analyses include Microarrays and RNA-seq.
+
+::: {.callout-note}
+**GO Enrichment** - GO terms are used to describe biological processes, cellular components, and molecular functions, and statistical methods are used to identify functional annotations that are over or under-represented in a set of DEGs.
+
+![](images/goterms.png){fig-align="center"}
+
+**RNA-seq and Microarrays (MA)** are techniques for measuring gene expression. RNA-seq is more sensitive than MA and allows you to measure the expression of whole transcriptomes instead of just known genes.
+:::
+
+### Background: Autoencoders
+
+Autoencoders are a type of neural network that are used to learn efficient data encodings in an unsupervised manner. They consist of two components: an encoder, which compresses the input into a latent space representation, and a decoder, which reconstructs the original input from the latent space. Autoencoders are trained to minimize the reconstruction error.
+
+::: {.fragment}
+![](images/ae.png){fig-align="center"}
+:::
+
+### Goals {.smaller}
+
+1. Develop a deep autoencoder model to learn a compressed representation of
+  differential expression data (i.e., log2 fold change values).
+2. Use the latent representation of the autoencoder to predict GO terms.
+3. Identify genes responsible for GO term enrichment.
+
+
+## The Dataset
+
+### Digital Expression Explorer 2 {.smaller}
+
+The Digital Expression Explorer 2 (DEE2) is a repository of uniformly processed RNA-seq data mined from public data obtained from the [Sequence Read Archive](https://www.ncbi.nlm.nih.gov/sra). DEE2 provides 532,711 processed RNA-seq runs for Mouse genes and 475,547 processed RNA-seq runs for Human genes.
+
+::: {.columns}
+::: {.column width="50%"}
+![](images/dee_datasets.png){.fragment width="300" height="300" fig-align="center"}
+:::
+::: {.column width="50%"}
+![](images/dee2.png){.fragment width="300" height="300" fig-align="center"}
+:::
+:::
+
+Leveraged DEE2 to curate 11130 unique datasets with corresponding GEO series including over 350,000 individual sequencing runs (SRRs) from experiments on *Mus musculus*. Of these, 7130 datasets met the inclusion criteria for our analysis. These datasets included 48,978 different gene transcripts. Differential expression analysis was performed on each dataset and the resulting log2 fold change values were stored. GO enrichment was then performed and enriched GO terms were stored.
+
+## Methods
+
+### Data Curation
+
+The datasets were filtered to exclude those without GEO accession, as they lacked metadata. GEO metadata was analyzed to select datasets that included more than one group. Differential expression and GO enrichment were performed, retaining GO terms with a p-value less than 0.05. The datasets were then combined into a single feature matrix, and GO terms were one-hot encoded, resulting in 11,130 unique GO terms. The data was split into training, testing, and validation sets, and subsequently standardized.
+
+```{.r code-line-numbers="|1-4|6-11"}
+# Differential Expression
+deg <- limma::lmFit(counts, design) %>%
+  limma::contrasts.fit(contrast) %>%
+  limma::eBayes() %>%
+  limma::topTable(number = Inf)
+
+go <- GOfuncR::go_enrich(
+    deg[c("symbol", "is_candidate")],
+    organismDb = "org.Mm.eg.db",
+    n_randsets = 100,
+    silent = TRUE
+  )$results
+```
+
+```{.python code-line-numbers="|1"}
+# Standardize the data
+scaler = StandardScaler()
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
+X_val = scaler.transform(X_val)
+```
+
+::: {.callout-note}
+The data curation process was parallelized using `doSNOW`, with tasks split into different scripts and combined in a bash script on Google Cloud to utilize more RAM.
+:::
+
+### Dimension Reduction 
+
+The dimension reduction techniques used include `VarianceThreshold`, which was necessary because several genes had very low variances across all datasets, impacting the performance of PCA. `PCA` was then applied, followed by `t-SNE`, a non-linear dimension reduction technique for high-dimensional data, which is used in RNA-seq analysis to identify clusters of similar genes or cells.
+
+```{.python code-line-numbers="|1-2|7-8|10-11"}
+# Remove low variance genes
+sel = VarianceThreshold(threshold=1)
+sel.fit(X)
+
+X_train = X_train[:, sel.get_support()]
+X_val = X_val[:, sel.get_support()]
+
+pca = PCA(n_components=2)
+X_pca = pca.fit_transform(X)
+
+tsne = TSNE(n_components=2, perplexity=50, n_jobs=mp.cpu_count())
+X_tsne = tsne.fit_transform(X)
+```
+
+::: {.callout-note}
+t-SNE is a technique for finding a low-dimensional space where data points are arranged in a way that reflects underlying similarities.
+:::
+
+### Autoencoder
+
+The neural network was implemented using `Keras` with a `TensorFlow` backend. The `Adam` optimizer was used along with the `MSE` loss function and `ReLU` activation. The model was trained for 50 epochs, during which the `validation loss` was evaluated. Additionally, the `ReduceLROnPlateau` callback was employed to reduce the learning rate when the `val_loss` stopped improving.
+
+```{.python code-line-numbers="|1-3|5-8|10"}
+encoder = Sequential()
+for units in layer_sizes:
+  encoder.add(Dense(units, activation="relu"))
+
+decoder = Sequential()
+for units in reversed(layer_sizes[:-1]):
+  decoder.add(Dense(units, activation="relu"))
+decoder.add(Dense(input_dim, activation="sigmoid"))
+
+autoencoder = Sequential([encoder, decoder])
+```
+
+![](images/model.png){fig-align="center"}
+
+::: {.callout-note}
+**Adam**, which stands for Adaptive Moment Estimation, is an adaptive learning rate method. It computes individual adaptive learning rates for different parameters from estimates of the first and second moments of the gradients.
+
+**`ReduceLROnPlateau`** is a technique used to reduce the learning rate when a metric has stopped improving. The parameters for this method include patience set to 5, factor set to 0.5, min_delta set to 0.1, and min_lr set to 0.00001.
+:::
+
+### Optimization
+
+- How does total *Number of Neurons* affect performance?
+- How does *Number of Hidden Layers* affect performance?
+  - Distributed the neurons so that each layer has ~half the neurons
+    of the previous layer
+- Used *Random Search* to find optimal hyperparameters
+  - `n_neurons` = 1, 10, 100, 200, 400, 600, 800, 1000, 2000
+  - `n_layers` = 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+
+![](images/ae.png){fig-align="center"}
+
+## Results
+
+### Dimension Reduction {.smaller}
+
+::: {.columns}
+::: {.column width="50%"}
+![](images/pca.png){.fragment fig-align="center"}
+:::
+::: {.column width="50%"}
+![](images/tsne.png){.fragment fig-align="center"}
+:::
+:::
+
+::: {.callout-note}
+- D.R. on the 21953 genes remaining
+  - Visualized using PCA and t-SNE
+  - Labelled using the most common GO term - "intracellular anatomical structure"
+  - Generally bad performance
+  - Visualized others, performance not much better
+- PCA
+  - Doesn't resolve the clusters well
+  - First 2 PCs only account for ~4.4% of variance
+- t-SNE
+  - Hoped it would be better
+  - Doesn't resolve the clusters well
+  - Need to spend more time fine-tuning the hyperparameters
+:::
+
+### Optimization & Performance {.smaller}
+
+::: {.columns}
+
+::: {.column width=50%}
+![](images/optimization-hidden-units.png){.fragment fig-align="center"}
+:::
+
+::: {.column width=50%}
+![](images/optimization-hidden-layers.png){.fragment fig-align="center"}
+:::
+
+::: {.callout}
+## With Best Hyperparameters {.smaller}
+Cross Validation Loss: $0.9632$
+:::
+
+::: {.callout-note}
+- Used 1 hidden layer
+  - Evaluated NUM_HIDDEM from 1 to 2000
+  - Loss improves as the number of neurons increases - 1000, 2000 best
+- Used 2000 HU and 1000 HU
+  - Evaluated NUM_LAYER from 1 to 10
+  - Best performance with 1 layer
+  - Plateaus after 2 layers
+  - 1000 HU gets worse with more
+- Best performance with 1 layer and 2000 HU
+  - Cross Validation Loss
+:::
+
+## Discussion
+
+### Limitations
+
+Due to memory constraints with GPU training, we were only able to use 21,953 out of 48,978 genes. This limitation also prevented us from evaluating more hyperparameters, and we were unable to assess performance on GO term prediction.
+
+### Future Work
+
+To improve the performance of the autoencoder, we plan to try different architectures such as sparse and variational autoencoders. Additionally, we aim to find a larger and more balanced dataset.
+
+
+## References 
+
+1. [Autoencoders](https://en.wikipedia.org/wiki/Autoencoder)
+2. [Digital Expression Explorer 2](https://dee2.io/index.html)
+3. [Gene Ontology](http://geneontology.org/)
